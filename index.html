@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BomDev — True SFF</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#080808;--bg1:#0f0f0f;--bg2:#141414;--card:#111;--card2:#161616;
+  --red:#e30613;--red2:#ff1a2e;
+  --red-dim:rgba(227,6,19,.1);--red-glow:rgba(227,6,19,.35);
+  --border:rgba(227,6,19,.18);--border2:rgba(227,6,19,.42);
+  --txt:#fff;--txt2:rgba(255,255,255,.55);--txt3:rgba(255,255,255,.22);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:'Noto Sans Thai',sans-serif;min-height:100vh;overflow-x:hidden}
+::selection{background:var(--red);color:#fff}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--red);border-radius:2px}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 55% at 50% -5%,rgba(227,6,19,.09) 0%,transparent 65%),
+    radial-gradient(ellipse 40% 30% at 85% 85%,rgba(180,0,10,.05) 0%,transparent 55%)}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(227,6,19,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(227,6,19,.025) 1px,transparent 1px);
+  background-size:52px 52px}
+.scanline{position:fixed;left:0;right:0;height:100px;z-index:0;pointer-events:none;
+  background:linear-gradient(to bottom,transparent,rgba(227,6,19,.015),transparent);
+  animation:scan 9s linear infinite}
+@keyframes scan{0%{top:-100px}100%{top:100vh}}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:58px;
+  background:rgba(8,8,8,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 22px;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:11px;text-decoration:none}
+.nav-ic{width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--red),#8a0008);
+  display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;
+  box-shadow:0 0 16px var(--red-glow),inset 0 1px 0 rgba(255,255,255,.1)}
+.nav-nm{font-size:16px;font-weight:800;color:#fff}.nav-nm span{color:var(--red)}
+.btn-dc{display:flex;align-items:center;gap:6px;background:#5865f2;color:#fff;border:none;
+  border-radius:10px;padding:7px 15px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;
+  font-weight:600;cursor:pointer;transition:all .25s;text-decoration:none;
+  box-shadow:0 4px 14px rgba(88,101,242,.3)}
+.btn-dc:hover{background:#4752c4;transform:translateY(-1px)}
+.btn-dc i{font-size:14px}
+
+.page{position:relative;z-index:1}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:90px 24px 60px;text-align:center}
+.hero-eyebrow{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:26px}
+.eyebrow-line{width:32px;height:1px;background:var(--border2)}
+.eyebrow-txt{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;
+  color:var(--red);text-transform:uppercase}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--red-dim);
+  border:1px solid var(--border2);border-radius:99px;padding:7px 20px;font-size:13px;
+  font-weight:600;color:var(--red);margin-bottom:28px;box-shadow:0 0 20px rgba(227,6,19,.12)}
+.badge-dot{width:7px;height:7px;border-radius:50%;background:var(--red);
+  box-shadow:0 0 8px var(--red-glow);animation:bdot 2s ease-in-out infinite}
+@keyframes bdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.hero-title{font-size:clamp(42px,9vw,78px);font-weight:900;line-height:1.04;
+  margin-bottom:22px;letter-spacing:-1.5px}
+.hero-title .w{color:#fff;display:block}
+.hero-title .r{display:block;color:var(--red);text-shadow:0 0 28px rgba(227,6,19,.5),0 0 60px rgba(227,6,19,.2)}
+.hero-sub{font-size:16px;color:var(--txt2);max-width:430px;margin:0 auto 10px;line-height:1.8;font-weight:300}
+.type-line{min-height:24px;margin-bottom:44px;display:flex;align-items:center;
+  justify-content:center;font-family:'Share Tech Mono',monospace;font-size:13px;
+  color:var(--txt3);letter-spacing:.5px}
+.cur{display:inline-block;width:2px;height:16px;background:var(--red);
+  vertical-align:middle;margin-left:2px;animation:cur .8s step-end infinite}
+@keyframes cur{0%,100%{opacity:1}50%{opacity:0}}
+.hero-btns{display:flex;flex-direction:column;gap:13px;width:100%;max-width:390px;margin:0 auto}
+.btn-solid{display:flex;align-items:center;justify-content:center;gap:10px;
+  background:linear-gradient(135deg,var(--red),#a0000c);color:#fff;border:none;
+  border-radius:99px;padding:17px 30px;font-family:'Noto Sans Thai',sans-serif;
+  font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;width:100%;
+  text-decoration:none;box-shadow:0 6px 24px var(--red-glow),inset 0 1px 0 rgba(255,255,255,.1)}
+.btn-solid:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(227,6,19,.55)}
+.btn-ghost{display:flex;align-items:center;justify-content:center;gap:10px;
+  background:transparent;color:var(--red);border:1.5px solid var(--border2);
+  border-radius:99px;padding:15px 30px;font-family:'Noto Sans Thai',sans-serif;
+  font-size:16px;font-weight:600;cursor:pointer;transition:all .3s;width:100%;text-decoration:none}
+.btn-ghost:hover{background:var(--red-dim);transform:translateY(-2px)}
+
+.divider{display:flex;align-items:center;gap:16px;max-width:760px;margin:0 auto;padding:0 22px}
+.div-line{flex:1;height:1px;background:var(--border)}
+.div-txt{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:3px;
+  color:var(--txt3);text-transform:uppercase;white-space:nowrap}
+
+.lk{padding:40px 22px 80px;max-width:760px;margin:0 auto}
+.lk-card{background:var(--card);border:1px solid var(--border);border-radius:24px;
+  padding:32px 28px;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.lk-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--red),transparent)}
+.lk-card::after{content:'';position:absolute;top:0;left:0;bottom:0;width:2px;
+  background:linear-gradient(180deg,var(--red),transparent)}
+.lk-head{display:flex;align-items:center;gap:12px;margin-bottom:26px}
+.lk-icon{width:46px;height:46px;border-radius:13px;
+  background:linear-gradient(135deg,var(--red),#8a0008);
+  display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;
+  flex-shrink:0;box-shadow:0 4px 16px var(--red-glow),inset 0 1px 0 rgba(255,255,255,.1)}
+.lk-title{font-size:20px;font-weight:800}
+.lk-sub{font-size:12px;color:var(--txt2);margin-top:3px;font-weight:300}
+.tabs{display:flex;gap:7px;margin-bottom:20px;background:var(--bg2);border-radius:13px;padding:5px}
+.tab{flex:1;padding:10px;border:none;border-radius:9px;font-family:'Noto Sans Thai',sans-serif;
+  font-size:14px;font-weight:600;cursor:pointer;color:var(--txt3);background:transparent;
+  transition:all .25s;display:flex;align-items:center;justify-content:center;gap:7px}
+.tab.on{background:var(--red);color:#fff;box-shadow:0 4px 14px var(--red-glow)}
+.tab:hover:not(.on){color:var(--txt2)}
+.iw{position:relative;margin-bottom:14px}
+.ii{position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  color:var(--txt3);font-size:14px;transition:color .25s;pointer-events:none}
+.inp{width:100%;padding:16px 46px 16px 46px;background:var(--bg2);
+  border:1.5px solid rgba(255,255,255,.07);border-radius:13px;color:#fff;
+  font-family:'Share Tech Mono',monospace;font-size:18px;outline:none;
+  transition:all .25s;letter-spacing:3px}
+.inp::placeholder{color:var(--txt3);font-family:'Noto Sans Thai',sans-serif;font-size:13px;letter-spacing:0}
+.inp:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(227,6,19,.1)}
+.inp:focus~.ii{color:var(--red)}
+.ic{position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--txt3);pointer-events:none}
+.btn-go{width:100%;padding:16px;background:linear-gradient(135deg,var(--red),#a0000c);
+  border:none;border-radius:13px;color:#fff;font-family:'Noto Sans Thai',sans-serif;
+  font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;
+  box-shadow:0 5px 20px var(--red-glow),inset 0 1px 0 rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-go:hover{transform:translateY(-2px);box-shadow:0 9px 28px rgba(227,6,19,.55)}
+.btn-go:active{transform:translateY(0)}
+.ex-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;align-items:center}
+.ex-l{font-size:12px;color:var(--txt3);font-family:'Share Tech Mono',monospace}
+.ex-c{padding:4px 12px;border-radius:99px;font-size:11px;font-family:'Share Tech Mono',monospace;
+  border:1px solid rgba(255,255,255,.09);color:var(--txt3);cursor:pointer;transition:all .2s;background:transparent}
+.ex-c:hover{border-color:var(--red);color:var(--red)}
+
+#rA{margin-top:22px}
+.rc{background:var(--card2);border:1px solid var(--border);border-radius:16px;overflow:hidden;
+  animation:ri .4s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes ri{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.rh{padding:16px 20px;background:var(--bg2);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.rav{width:46px;height:46px;border-radius:13px;
+  background:linear-gradient(135deg,var(--red),#8a0008);
+  display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;flex-shrink:0}
+.rn{font-size:17px;font-weight:800}
+.rs{font-size:11px;color:var(--txt3);margin-top:2px;font-family:'Share Tech Mono',monospace}
+.rct{margin-left:auto;padding:4px 12px;border-radius:99px;font-size:10px;font-family:'Share Tech Mono',monospace;font-weight:600}
+.rg{display:grid;grid-template-columns:1fr 1fr;padding:16px;gap:9px}
+@media(max-width:460px){.rg{grid-template-columns:1fr}}
+.rf{background:var(--card);border:1px solid rgba(255,255,255,.04);border-radius:11px;padding:12px 14px;transition:border-color .2s}
+.rf:hover{border-color:var(--border)}
+.rf.full{grid-column:1/-1}
+.rfl{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--txt3);text-transform:uppercase;margin-bottom:5px}
+.rfv{font-family:'Share Tech Mono',monospace;font-size:13px;color:#fff;word-break:break-all}
+.rfv.red{color:var(--red)}
+.cpr{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cpb{background:var(--red-dim);border:none;border-radius:5px;color:var(--red);font-size:10px;
+  padding:3px 8px;cursor:pointer;transition:all .2s;font-family:'Share Tech Mono',monospace;flex-shrink:0}
+.cpb:hover{background:var(--red);color:#fff}
+.rac{padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap}
+.ab{flex:1;min-width:88px;padding:10px;background:transparent;border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;color:var(--txt2);font-family:'Noto Sans Thai',sans-serif;font-size:13px;
+  font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.ab:hover{border-color:var(--red);color:var(--red);background:var(--red-dim)}
+.lw{padding:40px;text-align:center}
+.lr{width:38px;height:38px;border-radius:50%;border:3px solid rgba(227,6,19,.2);
+  border-top-color:var(--red);animation:sp .8s linear infinite;margin:0 auto 16px}
+@keyframes sp{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.lt{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--txt3);letter-spacing:2px}
+
+footer{border-top:1px solid var(--border);padding:28px 22px;text-align:center}
+.fn{font-size:17px;font-weight:900;color:var(--red);letter-spacing:1px;
+  text-shadow:0 0 18px var(--red-glow);margin-bottom:4px}
+.fs{font-size:11px;color:var(--txt3);margin-bottom:14px}
+.fl{display:flex;justify-content:center;gap:20px;flex-wrap:wrap}
+.fl a{font-size:11px;color:var(--txt3);text-decoration:none;font-family:'Share Tech Mono',monospace;
+  transition:color .2s;display:flex;align-items:center;gap:4px}
+.fl a:hover{color:var(--red)}
+.swal2-popup{font-family:'Noto Sans Thai',sans-serif !important;border-radius:18px !important}
+@media(max-width:480px){nav{padding:0 14px}.lk{padding:28px 14px 60px}.lk-card{padding:22px 16px}}
+</style>
+</head>
+<body>
+<div class="scanline"></div>
+
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="nav-ic"><i class="fas fa-database"></i></div>
+    <div class="nav-nm">Bom<span>Dev</span></div>
+  </a>
+  <a href="#" class="btn-dc" onclick="dcp(event)">
+    <i class="fab fa-discord"></i>Discord
+  </a>
+</nav>
+
+<div class="page">
+
+  <section class="hero">
+    <div class="hero-eyebrow">
+      <div class="eyebrow-line"></div>
+      <div class="eyebrow-txt">True SFF Lookup System</div>
+      <div class="eyebrow-line"></div>
+    </div>
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      <span>BomDev API · Free · No Key Required</span>
+    </div>
+    <h1 class="hero-title">
+      <span class="w" id="hw"></span>
+      <span class="r" id="hg"></span>
+    </h1>
+    <p class="hero-sub">ค้นหาข้อมูลลูกค้า True SFF ด้วยเบอร์โทรหรือเลขบัตรประชาชน ฟรี ไม่ต้องสมัคร</p>
+    <div class="type-line"><span id="tlt"></span><span class="cur"></span></div>
+    <div class="hero-btns">
+      <a href="#lookup" class="btn-solid"><i class="fas fa-magnifying-glass"></i> เริ่มค้นหาข้อมูล</a>
+      <a href="#" class="btn-ghost" onclick="dcp(event)"><i class="fab fa-discord"></i> เข้าร่วม Discord</a>
+    </div>
+  </section>
+
+  <div class="divider"><div class="div-line"></div><div class="div-txt">query_database</div><div class="div-line"></div></div>
+
+  <div class="lk" id="lookup">
+    <div class="lk-card">
+      <div class="lk-head">
+        <div class="lk-icon"><i class="fas fa-magnifying-glass"></i></div>
+        <div>
+          <div class="lk-title">ค้นหาข้อมูล</div>
+          <div class="lk-sub">เบอร์โทร 10 หลัก หรือเลขบัตรประชาชน 13 หลัก</div>
+        </div>
+      </div>
+      <div class="tabs">
+        <button class="tab on" id="tP" onclick="sw('phone')"><i class="fas fa-phone"></i> เบอร์โทร</button>
+        <button class="tab" id="tI" onclick="sw('id')"><i class="fas fa-id-card"></i> เลขบัตร</button>
+      </div>
+      <div class="iw">
+        <i class="fas fa-phone ii" id="ii"></i>
+        <input class="inp" id="mi" type="tel" inputmode="numeric"
+          placeholder="กรอกเบอร์โทรศัพท์ 10 หลัก" maxlength="10" autocomplete="off"
+          oninput="oi(this)" onkeydown="ok(event)"/>
+        <span class="ic" id="ic">0/10</span>
+      </div>
+      <button class="btn-go" onclick="ds()"><i class="fas fa-search"></i> ค้นหาข้อมูล</button>
+      <div class="ex-row">
+        <span class="ex-l">ex:</span>
+        <span class="ex-c" onclick="fx('0812345678')">0812345678</span>
+        <span class="ex-c" onclick="fx('0981234567')">0981234567</span>
+        <span class="ex-c" onclick="fx('0961234567')">0961234567</span>
+      </div>
+      <div id="rA"></div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="fn">BomDev</div>
+    <div class="fs">True SFF Lookup · Free API · Dev: BomDev · v1.0.0</div>
+    <div class="fl">
+      <a href="#" onclick="dcp(event)"><i class="fab fa-discord"></i>Discord</a>
+      <a href="/docs" target="_blank"><i class="fas fa-code"></i>API Docs</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+const DU = 'https://discord.gg/HahgbCHnvP';
+let tab = 'phone', ld = null;
+
+function ty(id, txt, sp, cb) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  let i = 0; el.textContent = '';
+  const t = setInterval(() => {
+    if (i < txt.length) el.textContent += txt[i++];
+    else { clearInterval(t); if (cb) cb(); }
+  }, sp);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  chkStatus();
+  ty('hw', 'ระบบค้นหา', 70, () =>
+    ty('hg', 'ข้อมูล True SFF', 62, () =>
+      setTimeout(() => ty('tlt', 'by BomDev', 30), 250)
+    )
+  );
+  Swal.fire({
+    title: '<span style="font-size:17px">⚠️ ข้อตกลงการใช้งาน</span>',
+    html: `<div style="font-family:'Noto Sans Thai';font-size:13px;color:rgba(255,255,255,.5);line-height:2.1;text-align:left">
+      &nbsp;· ระบบนี้พัฒนาโดย <b style="color:#e30613">BomDev</b> เพื่อการใช้งานภายในทีม<br/>
+      &nbsp;· ห้ามนำข้อมูลที่ได้ไปใช้ในทางที่ผิดกฎหมาย<br/>
+      &nbsp;· ผู้ใช้งานรับผิดชอบการกระทำของตนเองทั้งหมด<br/>
+      &nbsp;· Dev ไม่รับผิดชอบความเสียหายที่เกิดขึ้น</div>`,
+    background: '#0f0f0f', color: '#fff',
+    confirmButtonColor: '#e30613', confirmButtonText: 'รับทราบและเข้าใช้งาน',
+    allowOutsideClick: false, allowEscapeKey: false, backdrop: 'rgba(0,0,0,.92)',
+  });
+});
+
+async function chkStatus() {
+  try {
+    const r = await fetch('/status'), d = await r.json();
+    if (d.status === 'maintenance')
+      Swal.fire({ icon: 'warning', title: 'ปิดปรับปรุง', text: d.message,
+        background: '#0f0f0f', color: '#fff', confirmButtonColor: '#e30613',
+        confirmButtonText: 'ตกลง', allowOutsideClick: false });
+    else if (d.status === 'closed')
+      Swal.fire({ icon: 'error', title: 'ปิดให้บริการ', text: d.message,
+        background: '#0f0f0f', color: '#fff', confirmButtonColor: '#e30613',
+        confirmButtonText: 'ตกลง', allowOutsideClick: false });
+  } catch (_) {}
+}
+
+function sw(t) {
+  tab = t;
+  const inp = document.getElementById('mi');
+  document.getElementById('tP').classList.toggle('on', t === 'phone');
+  document.getElementById('tI').classList.toggle('on', t === 'id');
+  if (t === 'phone') {
+    inp.placeholder = 'กรอกเบอร์โทรศัพท์ 10 หลัก'; inp.maxLength = 10;
+    document.getElementById('ii').className = 'fas fa-phone ii';
+    document.getElementById('ic').textContent = '0/10';
+  } else {
+    inp.placeholder = 'กรอกเลขบัตรประชาชน 13 หลัก'; inp.maxLength = 13;
+    document.getElementById('ii').className = 'fas fa-id-card ii';
+    document.getElementById('ic').textContent = '0/13';
+  }
+  inp.value = ''; document.getElementById('rA').innerHTML = '';
+}
+
+function oi(el) {
+  el.value = el.value.replace(/\D/g, '');
+  const max = tab === 'phone' ? 10 : 13;
+  const c = document.getElementById('ic');
+  c.textContent = `${el.value.length}/${max}`;
+  c.style.color = el.value.length === max ? 'var(--red)' : 'var(--txt3)';
+}
+function ok(e) { if (e.key === 'Enter') ds(); }
+function fx(v) { const i = document.getElementById('mi'); i.value = v; oi(i); i.focus(); }
+
+async function ds() {
+  const q = document.getElementById('mi').value.trim();
+  const max = tab === 'phone' ? 10 : 13;
+  if (!q) {
+    Swal.fire({ toast: true, position: 'top', icon: 'warning', title: 'กรุณากรอกข้อมูล',
+      background: '#0f0f0f', color: '#fff', showConfirmButton: false, timer: 2000 }); return;
+  }
+  if (!/^\d+$/.test(q) || q.length !== max) {
+    Swal.fire({ icon: 'error', title: 'รูปแบบไม่ถูกต้อง',
+      html: `<div style="font-family:'Noto Sans Thai';color:rgba(255,255,255,.5)">ต้องเป็นตัวเลข <b style="color:#e30613">${max} หลัก</b> เท่านั้น</div>`,
+      background: '#0f0f0f', color: '#fff', confirmButtonColor: '#e30613', confirmButtonText: 'ลองใหม่' }); return;
+  }
+  document.getElementById('rA').innerHTML =
+    `<div class="lw"><div class="lr"></div><div class="lt">QUERYING DATABASE...</div></div>`;
+  try {
+    const r = await fetch(`/lookup?q=${q}`), d = await r.json();
+    if (!r.ok) {
+      const msg = typeof d.detail === 'object' ? d.detail.message : (d.detail || 'ไม่พบข้อมูล');
+      document.getElementById('rA').innerHTML =
+        `<div style="padding:20px;font-family:'Share Tech Mono',monospace;color:#ff4444;font-size:12px;letter-spacing:1px">NOT_FOUND: ${msg}</div>`;
+      Swal.fire({ toast: true, position: 'top-end', icon: 'info', title: 'ไม่พบข้อมูล',
+        background: '#0f0f0f', color: '#fff', showConfirmButton: false, timer: 2500 }); return;
+    }
+    ld = d; rCard(d, q);
+    Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `พบข้อมูล: ${d.data.name}`,
+      background: '#0f0f0f', color: '#fff', showConfirmButton: false, timer: 2500, timerProgressBar: true });
+  } catch (e) {
+    document.getElementById('rA').innerHTML = '';
+    Swal.fire({ icon: 'error', title: 'เชื่อมต่อไม่ได้',
+      html: `<div style="font-family:'Share Tech Mono',monospace;font-size:12px;color:rgba(255,255,255,.4)">${e.message}</div>`,
+      background: '#0f0f0f', color: '#fff', confirmButtonColor: '#e30613', confirmButtonText: 'ปิด' });
+  }
+}
+
+function rCard(d, q) {
+  const rd = d.data, carrier = d.carrier || '–';
+  const cc = {'AIS':'#f9c74f','True Move H':'#e30613','DTAC (NT)':'#6c9fe0','NT (TOT)':'#00ff88'}[carrier] || '#888';
+  const pid = rd.national_id || '–';
+  const pm = pid !== '–' ? pid.slice(0,3) + '–'.repeat(7) + pid.slice(-3) : '–';
+  const addr = rd.address || {};
+  const as = [addr.house_no, addr.moo?'หมู่'+addr.moo:'', addr.soi&&addr.soi!=='-'?'ซ.'+addr.soi:'', addr.street&&addr.street!=='-'?addr.street:'',
+    addr.subdistrict?'ต.'+addr.subdistrict:'', addr.district?'อ.'+addr.district:'',
+    addr.province?'จ.'+addr.province:'', addr.zipcode].filter(Boolean).join(' ') || '–';
+  const init = (rd.name||'?').replace(/^(นาย|นาง|นางสาว)\s?/,'').charAt(0) || '?';
+  document.getElementById('rA').innerHTML = `
+    <div class="rc">
+      <div class="rh">
+        <div class="rav">${init}</div>
+        <div><div class="rn">${rd.name||'–'}</div><div class="rs">query: ${q}</div></div>
+        ${carrier!=='–'?`<div class="rct" style="background:${cc}20;color:${cc};border:1px solid ${cc}40">${carrier}</div>`:''}
+      </div>
+      <div class="rg">
+        <div class="rf"><div class="rfl">ชื่อ</div><div class="rfv">${rd.firstname||'–'}</div></div>
+        <div class="rf"><div class="rfl">นามสกุล</div><div class="rfv">${rd.lastname||'–'}</div></div>
+        <div class="rf"><div class="rfl">เลขบัตรประชาชน</div>
+          <div class="cpr"><div class="rfv red">${pm}</div>
+          <button class="cpb" data-pid="${pid}" onclick="cpf(this.dataset.pid,this)">COPY</button></div></div>
+        <div class="rf"><div class="rfl">เพศ</div><div class="rfv">${rd.gender||'–'}</div></div>
+        <div class="rf"><div class="rfl">วันเกิด</div><div class="rfv">${rd.birthdate||'–'}</div></div>
+        <div class="rf"><div class="rfl">บัตรหมดอายุ</div><div class="rfv">${rd.id_expire||'–'}</div></div>
+        <div class="rf full"><div class="rfl">ที่อยู่</div>
+          <div class="rfv" style="font-size:12px;line-height:1.7">${as}</div></div>
+      </div>
+      <div class="rac">
+        <button class="ab" onclick="ca()"><i class="fas fa-copy"></i> คัดลอก</button>
+        <button class="ab" onclick="sr()"><i class="fas fa-code"></i> Raw JSON</button>
+        <button class="ab" onclick="clr()"><i class="fas fa-times"></i> ล้าง</button>
+      </div>
+    </div>`;
+}
+
+function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(text);
+  }
+  const el = document.createElement('textarea');
+  el.value = text;
+  el.style.position = 'fixed';
+  el.style.opacity = '0';
+  document.body.appendChild(el);
+  el.focus(); el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+  return Promise.resolve();
+}
+
+function cpf(v, btn) {
+  copyText(v).then(() => {
+    btn.textContent = '✓';
+    Swal.fire({ toast: true, position: 'bottom-end', icon: 'success', title: 'คัดลอกแล้ว',
+      background: '#0f0f0f', color: '#fff', showConfirmButton: false, timer: 1200 });
+    setTimeout(() => btn.textContent = 'COPY', 1500);
+  });
+}
+
+function ca() {
+  if (!ld) return;
+  const rd = ld.data, addr = rd.address || {};
+  const as = [addr.house_no, addr.moo?'หมู่'+addr.moo:'', addr.soi&&addr.soi!=='-'?'ซ.'+addr.soi:'', addr.street&&addr.street!=='-'?addr.street:'',
+    addr.subdistrict?'ต.'+addr.subdistrict:'', addr.district?'อ.'+addr.district:'',
+    addr.province?'จ.'+addr.province:'', addr.zipcode].filter(Boolean).join(' ') || '–';
+  const txt = `ชื่อ: ${rd.name}\nเพศ: ${rd.gender||'–'}\nวันเกิด: ${rd.birthdate||'–'}\nเลขบัตร: ${rd.national_id||'–'}\nบัตรหมดอายุ: ${rd.id_expire||'–'}\nค่าย: ${ld.carrier||'–'}\nที่อยู่: ${as}`;
+  copyText(txt).then(() => {
+    Swal.fire({ icon: 'success', title: 'คัดลอกทั้งหมดแล้ว',
+      html: `<pre style="text-align:left;font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(255,255,255,.45);background:#080808;padding:13px;border-radius:8px;white-space:pre-wrap">${txt}</pre>`,
+      background: '#0f0f0f', color: '#fff', confirmButtonColor: '#e30613', confirmButtonText: 'ปิด' });
+  });
+}
+
+function sr() {
+  if (!ld) return;
+  const j = JSON.stringify(ld.data.raw || ld.data, null, 2);
+  Swal.fire({ title: 'Raw JSON',
+    html: `<pre style="text-align:left;font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(255,255,255,.45);background:#080808;padding:13px;border-radius:8px;overflow:auto;max-height:310px;white-space:pre-wrap">${j}</pre>`,
+    background: '#0f0f0f', color: '#fff', confirmButtonColor: '#e30613', confirmButtonText: 'ปิด', width: 540 });
+}
+
+function clr() {
+  document.getElementById('rA').innerHTML = '';
+  document.getElementById('mi').value = '';
+  oi(document.getElementById('mi')); ld = null;
+}
+
+function dcp(e) {
+  e.preventDefault();
+  Swal.fire({
+    html: `<div style="text-align:center;padding:8px 0">
+      <div style="width:64px;height:64px;background:#5865f2;border-radius:18px;
+        display:flex;align-items:center;justify-content:center;margin:0 auto 16px;
+        box-shadow:0 8px 24px rgba(88,101,242,.4)">
+        <i class="fab fa-discord" style="font-size:30px;color:#fff"></i></div>
+      <div style="font-family:'Noto Sans Thai';font-size:18px;font-weight:800;color:#fff;margin-bottom:8px">BomDev Community</div>
+      <div style="font-family:'Noto Sans Thai';font-size:13px;color:rgba(255,255,255,.5);line-height:1.9">
+        อัปเดตระบบ · ถามตอบ · แจ้งปัญหา<br/>เข้าร่วมได้เลยฟรี!</div></div>`,
+    background: '#0f0f0f', color: '#fff', showCancelButton: true,
+    confirmButtonColor: '#5865f2', confirmButtonText: '<i class="fab fa-discord"></i> เข้าร่วมเลย',
+    cancelButtonColor: '#1a1a1a', cancelButtonText: 'ยกเลิก', backdrop: 'rgba(0,0,0,.88)',
+  }).then(r => { if (r.isConfirmed) window.open(DU, '_blank'); });
+}
+</script>
+</body>
+</html>
